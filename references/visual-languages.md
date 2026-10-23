@@ -11,8 +11,9 @@ Each video picks **one** visual language in the storyboard's *Visual style / loo
 | 板书动画 maths / derivation | manim | `manim -pqh scene.py` produces an mp4 directly | Formulas, step-by-step derivations, charts built up |
 | 粘土质感 clay | Blender | Modelling plus materials (subsurface, fingerprint normal map), Cycles/EEVEE image sequence | Characters, stop-motion feel, tactile shots |
 | IMPACT 大字 kinetic poster type | Pure SVG + opentype.js glyph outlines, in a frame-pure browser renderer | One screen per lyric/VO line; captured frame by frame like the other browser languages | Rap, slogans, high-energy sections; whenever the words themselves are the picture |
+| ASCII (3D → characters) | three.js rendered into a character grid (lit + normal passes, edge glyphs) | One 3D scene per lyric line; the lyric is written into the lit cells, the sung word as dim block letters behind | Music videos (**default for music videos**) |
 
-The first two have been used in full productions. IMPACT is built and demoed in the music-video renderer but has not shipped in a finished video yet. The others are mapped only. Treat the first real use of any of these as a pilot: make one shot, get the creator's approval, then scale up.
+Illustration, hand-drawn and ASCII have been used in full productions. IMPACT has full music-video drafts but no approved final yet; in a head-to-head on one song the creator chose the ASCII cut. The others are mapped only. Treat the first real use of any of these as a pilot: make one shot, get the creator's approval, then scale up.
 
 ## Install
 
@@ -123,5 +124,9 @@ The whole frame is the words.
   | heartbeat | grow out of a flat line with a running spike |
 
   Adding a pictogram means adding a drawing function plus a warp for it. Lines without a pictogram can use `match` with `wave` or `melt`.
+
+**3D objects in IMPACT.** A hero object can be a real three.js mesh drawn as cel-shaded vector polygons (see music-videos.md, *3D in a vector style*), turning slowly inside the poster. Keep a few detail levels (hero, mid, tiny) of one mesh for the different sizes it's used at.
+
+**Pictures behind the type.** `at: 'back'` fades a pictogram to 0.32 by default; raise it (e.g. 0.9) when the picture is the point and the line is a single word. A single long token (a hyphenated chant) can't wrap, so beside a picture it ends up tiny; put the picture behind it instead.
 
 **Fonts.** Subset the CJK font per song to just the characters it uses (fontTools, a few tens of KB). System fonts are licensed for local rendering only, so never redistribute the subset. Without the subset file, CJK characters fall back to plain text in the morphing modes.

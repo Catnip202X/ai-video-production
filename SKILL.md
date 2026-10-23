@@ -42,7 +42,7 @@ visual language ──▶ Remotion project (one component per shot, timed off th
 | 6. Post cards | Fetch real posts, show the original text first, then a translation covers it | [social-post-cards.md](references/social-post-cards.md) |
 | 7. Review | The creator watches the draft; log every change in the decision log; bump the VO / draft version | — |
 | 8. Publish | Covers + `upload.json`, then upload through the patched bilibili-mcp, only with the creator's per-upload OK | [publishing-bilibili.md](references/publishing-bilibili.md) |
-| Music video | Song → analysis → lyric timing → per-line storyboard → frame-pure renderer → mux | [music-videos.md](references/music-videos.md) |
+| Music video | Song → analysis → lyric timing → palette (the creator picks it, every video) → per-line storyboard with a new scene for every repeated line → frame-pure renderer → mux. No graphics shared with any other video | [music-videos.md](references/music-videos.md) |
 
 ## Scripts in this skill
 
