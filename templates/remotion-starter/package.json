@@ -1,0 +1,21 @@
+{
+  "name": "video-motion",
+  "private": true,
+  "description": "Motion graphics for one video (Remotion). Timeline comes from assemble_vo.py.",
+  "scripts": {
+    "studio": "remotion studio src/index.js",
+    "still": "remotion still src/index.js",
+    "render": "remotion render src/index.js Draft out/draft.mp4 --codec=h264 --crf=18 --audio-bitrate=320k"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.530",
+    "@remotion/cli": "4.0.530",
+    "@remotion/paths": "4.0.530",
+    "@remotion/renderer": "4.0.530",
+    "@remotion/shapes": "4.0.530",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.530",
+    "roughjs": "4.6.6"
+  }
+}
