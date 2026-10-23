@@ -23,3 +23,7 @@ Claude Code picks the skill up automatically. Start with [`SKILL.md`](SKILL.md).
 - **Voiceover:** Python 3 (the voiceover scripts use only the standard library), plus a running GPT-SoVITS `api.py` (see [`references/tts-voiceover.md`](references/tts-voiceover.md)).
 - **ASR check and music analysis:** [uv](https://docs.astral.sh/uv/), because those scripts pull their dependencies inline. The Whisper check and lyric timing use mlx-whisper, so they need Apple Silicon.
 - **Motion graphics:** Node 18+ for Remotion.
+
+## License
+
+MIT, see [LICENSE](LICENSE). Bundled third-party pieces keep their own terms: MamboTTS voice weights, GPT-SoVITS, Remotion (which has its own company licence for larger teams).
