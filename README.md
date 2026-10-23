@@ -3,7 +3,7 @@
 A [Claude Code](https://claude.com/claude-code) skill for one person making AI-assisted videos, from script to upload. It covers narrated Chinese explainers and lyric-synced music videos.
 
 - **Script and storyboard:** templates, plus a storyboard that doubles as the project's memory (locked decisions, shot list, decision log).
-- **Visual languages:** six styles, each mapped to a tool: illustration and hand-drawn rough.js in Remotion, p5.brush ink, three.js, manim, Blender.
+- **Visual languages:** seven styles, each mapped to a tool: illustration and hand-drawn rough.js in Remotion, IMPACT kinetic poster type (SVG + opentype.js glyph morphing), p5.brush ink, three.js, manim, Blender.
 - **Voiceover:** a GPT-SoVITS / [MamboTTS](https://github.com/Tsukimisaka/MamboTTS) engine reads one whole sentence at a time into per-shot folders, Whisper re-listens to every line and re-takes the ones with dropped words, and shot durations are timed to the voiceover.
 - **Motion graphics:** a Remotion starter driven by the voiceover timeline. It includes rough.js primitives, burned-in subtitles, code-generated sound effects and contact-sheet stills.
 - **Real social posts:** shown as faithful cards, original text first, then a translation covering it.
