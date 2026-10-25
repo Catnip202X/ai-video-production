@@ -35,7 +35,7 @@ Then add Claude Code deny rules so the assistant cannot weaken the vault:
 
 ## Uploading
 
-**Uploading, posting, replying and messaging are public actions. Get the creator's explicit OK for each one,** with the final title, category, publish time and file shown.
+**Uploading runs without a per-upload confirmation** — the creator granted a standing authorization on 2026-10-25: prepare the metadata, upload, then report the BV, title, category and publish time. Ask first only for catastrophic cases: an irreversible overwrite or loss of the creator's work, a wrong account or wrong target, money outside an approved budget, or anything that would expose credentials.
 
 Prepare `upload.json` next to the render:
 
