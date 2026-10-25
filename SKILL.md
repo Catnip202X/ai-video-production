@@ -29,6 +29,8 @@ visual language ──▶ Remotion project (one component per shot, timed off th
 7. **Real sources only.** News visuals use real posts, shown faithfully with their original media. A deleted post is labelled deleted and never reconstructed. Every fact in the script has a source.
 8. **Match the creator's voice.** A solo creator narrates as 我, not 我们. Ask the creator once and record it.
 9. **Publishing is the creator's call.** Render, write the upload metadata, then stop and ask before uploading or posting anything. Upload through the patched [bilibili-mcp](https://github.com/Catnip202X/bilibili-mcp/tree/patched). Its credential vault is off-limits to the assistant.
+10. **Every cover ships in two ratios.** Bilibili takes a 16:9 cover and a 4:3 cover in the same upload, so a video is not finished until both stills exist: 1920×1080 and 1440×1080, the same design, rendered from the same motion project. Stills render at frame 0, so every shape needs a negative `at` to be visible. Deliver `<title> cover_16x9.png` and `<title> cover_4x3.png` together; with one missing, the publish stage stops and asks.
+
 
 ## Stages
 
@@ -41,7 +43,7 @@ visual language ──▶ Remotion project (one component per shot, timed off th
 | 5. Motion | Remotion project from `templates/remotion-starter/`; `sync_vo.sh`; one component per shot; contact-sheet stills; render | [motion-graphics.md](references/motion-graphics.md) |
 | 6. Post cards | Fetch real posts, show the original text first, then a translation covers it | [social-post-cards.md](references/social-post-cards.md) |
 | 7. Review | The creator watches the draft; log every change in the decision log; bump the VO / draft version | — |
-| 8. Publish | Covers + `upload.json`, then upload through the patched bilibili-mcp, only with the creator's per-upload OK | [publishing-bilibili.md](references/publishing-bilibili.md) |
+| 8. Publish | Covers **in both ratios** (16:9 1920×1080 **and** 4:3 1440×1080) + `upload.json`, then upload through the patched bilibili-mcp, only with the creator's per-upload OK | [publishing-bilibili.md](references/publishing-bilibili.md) |
 | Music video | Song → analysis → lyric timing → palette (the creator picks it, every video) → per-line storyboard with a new scene for every repeated line → frame-pure renderer → mux. No graphics shared with any other video | [music-videos.md](references/music-videos.md) |
 
 ## Scripts in this skill

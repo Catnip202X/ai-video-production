@@ -64,7 +64,7 @@ export const S3_02 = ({ L }) => (
 3. **Short clip:** `npx remotion render src/index.js Draft out/clip.mp4 --frames=0-300`.
 4. **Full draft,** in the background: `npx remotion render src/index.js Draft "<project>/Drafts/<title>_draft_v1.mp4" --codec=h264 --crf=18 --audio-bitrate=320k`.
 5. **Check the file:** ffprobe the duration (it should equal `timeline.total`), check levels with `ffmpeg -af volumedetect` (no clipping, no silent stretches), and sample frames.
-6. **Covers:** add `<Still>` compositions (16:9 1920×1080 and 4:3 1440×1080 are common platform requirements). Stills render at frame 0, so draw everything with a negative `at`.
+6. **Covers:** add **both** `<Still>` compositions — 16:9 1920×1080 and 4:3 1440×1080. Bilibili wants both ratios in one upload, so a single-ratio cover is not deliverable. Stills render at frame 0, so draw everything with a negative `at`.
 
 ## Gotchas
 

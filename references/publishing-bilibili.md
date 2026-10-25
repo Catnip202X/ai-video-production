@@ -54,7 +54,10 @@ Prepare `upload.json` next to the render:
   - The fork rejects unknown IDs. Look current ones up in `bilibili_api/data/video_uploader_meta_pre.json`, or with `bili_video_zones`.
   - Tech explainers go in **231**.
 - **`publish_time`:** the server's **local** time, 2 hours to 15 days ahead. If the audience is in another time zone (e.g. Beijing 08:00), convert first. A time that is too close rolls to the next slot.
-- **Covers:** 16:9 (1920×1080) and 4:3 (1440×1080) stills rendered from the Remotion project.
+- **Covers — both ratios, every upload.** Bilibili shows a 16:9 crop on some surfaces and a 4:3 crop on others, so the upload carries two separate stills rendered from the same Remotion project and the same design:
+  - `cover_16x9.png` — 1920×1080 → `cover_path`
+  - `cover_4x3.png` — 1440×1080 → `cover43_path`
+  Neither is optional: with one missing, stop and tell the creator instead of uploading with a single ratio. Stills render at frame 0, so draw every shape with a negative `at`.
 - **`ai_content: true`:** sets the "含AI生成内容" declaration. Use it for AI voiceover or AI-generated visuals.
 - **Description:** sources (post URLs, data sources) plus the AI-content note. Tags: ≤ 12, with series base tags first.
 - **Content ID:** mute embedded third-party clips that contain music before uploading.
