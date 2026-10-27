@@ -29,7 +29,12 @@ visual language ──▶ Remotion project (one component per shot, timed off th
 7. **Real sources only.** News visuals use real posts, shown faithfully with their original media. A deleted post is labelled deleted and never reconstructed. Every fact in the script has a source.
 8. **Match the creator's voice.** A solo creator narrates as 我, not 我们. Ask the creator once and record it.
 9. **Publishing runs without a gate — standing authorization (creator, 2026-10-25).** Render, write the upload metadata, upload through the patched [bilibili-mcp](https://github.com/Catnip202X/bilibili-mcp/tree/patched), then report the BV and the publish time. Do not stop for a per-upload OK. The same holds for the day-to-day decisions in this pipeline: pick the sensible option and say what you picked. Ask only when the failure is catastrophic — unrecoverable loss or overwrite of the creator's work, a wrong account or wrong target, spending money outside an approved budget, or an action that would expose credentials. The credential vault stays off-limits to the assistant regardless.
-10. **Every cover ships in two ratios.** Bilibili takes a 16:9 cover and a 4:3 cover in the same upload, so a video is not finished until both stills exist: 1920×1080 and 1440×1080, the same design, rendered from the same motion project. Stills render at frame 0, so every shape needs a negative `at` to be visible. Deliver `<title> cover_16x9.png` and `<title> cover_4x3.png` together; with one missing, the publish stage stops and asks.
+10. **Previs before generation.** Block the shot in the project's own renderer and export its still
+   first; only then hand that still to a video model, and only for shots the engine is weak at (faces,
+   crowds, cloth, photoreal machines). The deterministic render stays the master — generated footage is
+   an added layer, an insert or a separate cut, and every generated shot is logged with tool, reference
+   still and seed. See [references/previs.md](references/previs.md).
+11. **Every cover ships in two ratios.** Bilibili takes a 16:9 cover and a 4:3 cover in the same upload, so a video is not finished until both stills exist: 1920×1080 and 1440×1080, the same design, rendered from the same motion project. Stills render at frame 0, so every shape needs a negative `at` to be visible. Deliver `<title> cover_16x9.png` and `<title> cover_4x3.png` together; with one missing, the publish stage stops and asks.
 
 
 ## Stages
@@ -39,6 +44,7 @@ visual language ──▶ Remotion project (one component per shot, timed off th
 | 1. Project | Copy `templates/Script.md` + `templates/Storyboard.md` into `Projects/<title>/` with `Audio Tracks/` and `Drafts/` | [script-and-storyboard.md](references/script-and-storyboard.md) |
 | 2. Script | Logline, scenes, VISUAL / VO / MUSIC-SFX blocks, `[S#-##]` shot tags on VO lines, sources at the end | same |
 | 3. Storyboard | Lock aspect ratio, visual language, palette, pacing, typography, recurring props; draft the shot list with a `Min` column | same |
+| 3b. Previs | Export one full-size still per shot from the engine (`stills --outdir`); review and fix composition before any motion work; optionally feed a still to a video model for shots the engine can't draw | [previs.md](references/previs.md) |
 | 4. Voiceover | Start the engine → `generate_vo.py` → `verify_vo.py` → `assemble_vo.py --update`; per-project `pronounce.json` | [tts-voiceover.md](references/tts-voiceover.md) |
 | 5. Motion | Remotion project from `templates/remotion-starter/`; `sync_vo.sh`; one component per shot; contact-sheet stills; render | [motion-graphics.md](references/motion-graphics.md) |
 | 6. Post cards | Fetch real posts, show the original text first, then a translation covers it | [social-post-cards.md](references/social-post-cards.md) |
@@ -53,6 +59,7 @@ visual language ──▶ Remotion project (one component per shot, timed off th
 - `scripts/assemble_vo.py <Storyboard.md> [--update] [--lead 0.4 --gap 0.35 --tail 0.6]` computes shot durations from the VO, writes `timeline.json`, the full VO track and an SRT, and writes the durations back into the shot table.
 - `scripts/music/analyze.py <song.wav>` finds tempo, key, beats, downbeats, onsets and labelled sections with energy (uv inline deps).
 - `scripts/music/lyrics.py <song.wav>` separates the vocals with Demucs and gives word-timed lyrics with Whisper, force-aligned to official lyric text when it is provided.
+- `node tools/stills.mjs --project <key> --lines 0-64 [--outdir Previs/<title>]` (in the music-video workspace) writes a contact sheet, or with `--outdir` one full-size PNG per shot plus `previs.json` — the previs frames a video model is conditioned on.
 - `templates/remotion-starter/` is a Remotion project wired to `timeline.json`. It includes rough.js primitives, VO and subtitle tracks, a synthesized-SFX generator and a contact-sheet stills tool.
 
 ## Working habits

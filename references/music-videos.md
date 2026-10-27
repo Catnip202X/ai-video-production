@@ -36,6 +36,21 @@ A lyric-synced music video is built from analysis data computed once per song. A
      - a hyphenated chant is a single lyric "word", so it lights up all at once; let the scene stagger it letter by letter.
 5. **Ask the creator for the colour palette**, every video. Don't reuse a previous video's palette or fall back to a saved one.
    **Storyboard per lyric line,** together with the creator. For each line note: scene, shot (wide / left / right / close / low / high / dutch), text mode, lead and hold, and transitions. Sections with energy > 0.6 get punchier text, e.g. word-by-word instead of line-by-line. A line's scene holds about 0.35 s after its last word.
+5b. **Previs stills — and, only if needed, generation.** Before building motion, export one still per
+   storyboard line and look at the shots as pictures:
+
+   ```bash
+   node tools/stills.mjs --project <key> --lines 0-64 --cols 9 --width 214 --out "out/<title>/sheet.png"   # review
+   node tools/stills.mjs --project <key> --lines 0-64 --outdir "Previs/<title>"                                # one PNG per shot + previs.json
+   ```
+
+   The stills come from the same export page as the final render, so they *are* the frames the film will
+   show. Fix composition here, in code, where it is cheap. When a shot needs something the engine is
+   weak at — a face, a crowd, cloth, a photoreal train — hand its previs PNG to an image-to-video model
+   as the first frame and describe only motion and light, never the framing. The deterministic render
+   stays the master; a generated shot is an added layer or a separate cut, logged in the decision log
+   with tool, reference still and seed. Full workflow and rules: [previs.md](previs.md).
+
 6. **Build scenes** in the chosen visual language. Every frame is a pure function of `t` plus the analysis: seeded RNG, no CSS transitions, `@keyframes` frozen to frame time. The audio reactivity (FFT bands, bass/mid/high, beat and downbeat decay, beat phase, current section) is computed from the same data.
 7. **Preview** in a local dev server with a seek hook (`window.__seek(s)`). Review contact sheets with one still per lyric line, taken 70% through the line and tiled with ffmpeg.
 8. **Render:**
@@ -60,6 +75,7 @@ A lyric-synced music video is built from analysis data computed once per song. A
 ## Style lessons
 
 - **Camera:** slow drift only. No per-line kicks, downbeat zoom punches or glitch jolts. Use shake only for a story beat, and ease it.
+- **Words enter from off-screen** (creator, 2026-10-27): every lyric word flies in from beyond the nearest frame edge to its slot; nothing materialises in place on screen. See visual-languages.md.
 - **Lyric text:** pin it to fixed screen positions like a stencil. With text-art styles this cut per-frame character churn from about 50% to about 5%. Give every CJK character its own x position so wide glyphs don't shift the row.
 - **Colour:** one colour per object, and the same kind of object always has the same colour. Keep it semantic, e.g. coins gold, bills green. Background scenery doesn't count toward these rules.
 - **Composition:** don't hog the centre. Use thirds, crops and dutch angles.
