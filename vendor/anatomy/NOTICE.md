@@ -5,7 +5,7 @@ Copied from [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy), com
 The files here are unchanged. Left out:
 
 - `examples/` except `dial-indicator`, `spot-plate` and `test-rig`, and all built example pages (about 25 MB). `SKILL.md` still names the others; read them upstream.
-- `scripts/publish.mjs` and `references/publish.md`, which post to upstream's community gallery.
+- `scripts/publish.mjs`, `scripts/session.mjs` and `references/publish.md`, which post to upstream's community gallery.
 - Tests, evals, CI, `agents/` and upstream's project files.
 
 How this skill uses it: [`references/isometric-figures.md`](../../references/isometric-figures.md).
