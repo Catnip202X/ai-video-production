@@ -11,9 +11,24 @@ Each video picks **one** visual language in the storyboard's *Visual style / loo
 | 板书动画 maths / derivation | manim | `manim -pqh scene.py` produces an mp4 directly | Formulas, step-by-step derivations, charts built up |
 | 粘土质感 clay | Blender | Modelling plus materials (subsurface, fingerprint normal map), Cycles/EEVEE image sequence | Characters, stop-motion feel, tactile shots |
 | IMPACT 大字 kinetic poster type | Pure SVG + opentype.js glyph outlines, in a frame-pure browser renderer | One screen per lyric/VO line; captured frame by frame like the other browser languages | Rap, slogans, high-energy sections; whenever the words themselves are the picture |
+| LAB lab-instrument readout (**frozen 2026-11-01:** still works, no new features; new videos with this look use GL) | Pure SVG, frame-pure browser renderer | One shot per lyric line; huge cropped type + hairline instrument pictures | Tech, corporate, AI themes; near-black stage, one glowing accent |
+| GL glowing line art | `src/gl` in the music-video workspace (WebGL, based on pdoom-video, MIT) | `engine: 'gl'` in the project, then the usual `npm run render`; `--samples 1` for drafts. See music-videos.md | New LAB-look videos; anything that needs HDR glow, real motion blur or real 3D. The creator preferred it to LAB side by side (2026-11-01) |
+| 等距机械 isometric machine figure | [anatomy](isometric-figures.md) kit (SVG, MIT) in `vendor/anatomy`; `scripts/anatomy-to-video.mjs` | A dense machine built part by part, whose motion is the explanation; clip stepped frame by frame | Mechanisms and systems in explainers; machine or tech set pieces in music videos |
 | ASCII (3D → characters) | three.js rendered into a character grid (lit + normal passes, edge glyphs) | One 3D scene per lyric line; the lyric is written into the lit cells, the sung word as dim block letters behind | Music videos (**default for music videos**) |
 
 Illustration, hand-drawn and ASCII have been used in full productions. IMPACT has full music-video drafts but no approved final yet; in a head-to-head on one song the creator chose the ASCII cut. The others are mapped only. Treat the first real use of any of these as a pilot: make one shot, get the creator's approval, then scale up.
+
+## Craft toolbox
+
+From mexicat's "i'm upping my p(doom)" ([source](https://github.com/mexicat/pdoom-video)). A toolbox, not a house style: the creator's rules win, and the look of a reference never overrides them.
+
+- Each set piece has its own instrument and idiom.
+- A palette has a structure: dark ground, light type or paper, one signal colour that alone may glow, one rare accent owned by one moment. The creator still picks the colours, and a reference's palette is never reused.
+- Rhythm through light/dark page inversions.
+- Type roles: a display face; mono for machine text; a serif for quiet lines; a single-stroke face for what a pen writes. Keep kerning when drawing letter by letter.
+- Fonts match the motif: road signs in a road-sign face, screens in a UI face. Not always one face.
+- Dry captions and tiny footnotes suit tech or corporate topics. They are not a default.
+- What reads as AI slop: glowing brains, code rain, lens-flare soup, stock nebulae, purple-and-cyan neon for its own sake.
 
 ## Install
 
@@ -31,6 +46,11 @@ brew install --cask blender
   - with Remotion, all motion comes from `useCurrentFrame()`
 
   Frame-pure renders can be resumed, run in parallel, and produce identical stills.
+- **Words enter from off-screen** (creator, 2026-10-27). Lyric and title words never pop, fade or
+  scale into existence in place on screen. Each word starts beyond the nearest frame edge and moves into
+  its slot (a short ease-out, about 0.4 s, arriving just before it is sung), or is revealed by
+  something that itself comes in from off-screen. Once a word is in place its sung / unsung states
+  still work as normal.
 - **Write a design system file first** (`theme.js`): palette with meanings, fonts, fps, size. Shots use only tokens from it.
 - **Keep text crisp.**
   - Use system CJK fonts for Chinese, e.g. PingFang SC for UI and Hannotate SC / HanziPen SC for hand-drawn.
@@ -47,6 +67,27 @@ brew install --cask blender
 - **Background:** cream paper `#F6F1E7` with a faint blue grid, a subtle vignette, black ink `#1E1E1E`, and annotation colours red / blue / highlighter yellow / green.
 - **Real-world artefacts** (posts, screenshots) keep their own look. They get "taped" onto the paper, slightly rotated.
 - **Stills and thumbnails** render at frame 0, so draw every shape with a negative `at` to show it finished.
+
+## LAB lab-instrument specifics
+
+After the language of mexicat's "i'm upping my p(doom)" (first used 2026-10-27). Generalised devices:
+- ONE CONTINUOUS CAMERA (the reference cuts ~12 times in 156 s): each line is a card in one world; the
+  camera pans, rolls 180° or dives (zoom-through) from card to card, with 1/60 s motion blur, and
+  cards it leaves stay put. The next line waits dim off-frame and arrives by the camera move, then fills
+  as sung, with a glowing pen point at the fill edge. Study a reference's motion with 24 fps strips of
+  its transitions, not single frames — stills hide all of this.
+- Stage: near-black, silver hairline technical drawing, tiny mono annotations, corner crop marks, faint
+  drifting graph paper; ONE glowing accent (bloom), film grain, vignette. Paper inversions (silver-white
+  page, black type, accent) for a few beats.
+- Type: heavy display face, huge, allowed to crop at the frame edge; mono kickers; italic serif for quiet
+  lines; type on surfaces (arc around a centre, receding plane). Letter-level karaoke: unsung dim,
+  singing in the accent filling letter by letter with glow, sung solid. Every word flies in from off-frame.
+- Document device: the line is written INTO a document from the song's world — a chat prompt with a
+  next-token dropdown for AI songs, a contract clause with redlined safeguards, INITIAL HERE tab and a
+  self-writing signature for corporate songs; terminal, receipt and stamped form also exist. The
+  marginalia shows what the document nearly said; the last word is the commit beat (send/sign/stamp).
+- Instruments as pictures: split-flaps, network diagrams, orbit plots, oscilloscopes, gantt, tickers.
+- Cuts: hard cuts with a short linger, accent flashes on hits, zoom-throughs.
 
 ## IMPACT kinetic type specifics
 

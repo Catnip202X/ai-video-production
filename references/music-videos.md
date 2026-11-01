@@ -23,6 +23,8 @@ A lyric-synced music video is built from analysis data computed once per song. A
    - section labels A/B/C (cosine > 0.985 counts as the same label) and energy from 0 to 1
 3. **Get the lyric text** from an official or annotated source the creator provides. **Never from Whisper or from memory.** Save it to `lyrics/<key>.txt`, one line per lyric line, with section markers turned into blank lines.
 4. **Time the lyrics:** `uv run scripts/music/lyrics.py "audio/<title>/<key>.wav"` writes `<wav>.lyrics.json`. Aim for more than 95% of words aligned.
+   - Then force-align Latin-script songs: in the studio, `tools/align.sh "audio/<title>/<key>.wav"` and `--promote`. A global CTC pass over the known text (method from mexicat/pdoom-video, MIT). Blind-tested 2026-11-01: 7–1 over plain Whisper timing, 1–4 against Whisper's own aligner on the one song where they met, so `tools/archive/realign.py` stays as a fallback. Non-Latin lines stay on `lyrics.py`.
+   - Before imitating a reference video, read its description and search GitHub: code-rendered videos are often open source.
    - **Vocals:** Demucs `--two-stems=vocals -n htdemucs` writes `stems/vocals.wav` (cached).
    - **Transcription:** mlx-whisper `large-v3-turbo` with word timestamps. Settings: `condition_on_previous_text=False`, `no_speech_threshold=0.5`, `compression_ratio_threshold=2.2`, and the lyric text (≤ 800 characters) as the initial prompt.
    - **Hallucination filter:** drops segments with compression > 2.4 or no_speech > 0.7; words with vocal RMS < 0.08 or probability < 0.1; "words" over 24 characters; and anything repeated 4+ times in a row.
@@ -53,18 +55,39 @@ A lyric-synced music video is built from analysis data computed once per song. A
 
 6. **Build scenes** in the chosen visual language. Every frame is a pure function of `t` plus the analysis: seeded RNG, no CSS transitions, `@keyframes` frozen to frame time. The audio reactivity (FFT bands, bass/mid/high, beat and downbeat decay, beat phase, current section) is computed from the same data.
 7. **Preview** in a local dev server with a seek hook (`window.__seek(s)`). Review contact sheets with one still per lyric line, taken 70% through the line and tiled with ffmpeg.
-8. **Render:**
+8. **Render** (GL projects render differently, see [GL engine](#gl-engine)):
    - Headless Chrome (Playwright, `--force-color-profile=srgb`) with N workers. Each calls `renderFrame(n)` and captures a PNG over CDP.
    - Frames go through `image2pipe` into ffmpeg together with the song.
    - h264: `libx264 -preset slow -crf 12 -pix_fmt yuv420p -movflags +faststart` and AAC 320k. Masters: ProRes 4444 (`prores_ks -profile:v 4`) or FFV1 + FLAC.
    - Speed: about 35 fps with 4 workers at 1080p60 (≈ 6 min for a 3.5-min song).
    - Render a short range first, then the full song in the background.
-9. **Check every render:** frame count, duration, `volumedetect` levels, sampled frames.
+9. **Check every render:** frame count, duration, `volumedetect` levels, sampled frames. Before a draft goes to the creator, run `node tools/audit-text.mjs --project <key>` and look at what it flags.
 10. **Deliver:**
     - Numbered drafts: `out/<title>/<title> N.mp4`. A second cut of the same song (another visual language) keeps counting in the same folder.
     - The approved cut: `<title> final.mp4`.
     - Credit files in every language the audience uses, listing song credits and CC-BY assets. Fill in the **complete** credits yourself (writers, producers, mix, master, label, release date), never a "fill in later" placeholder. The source upload's description often lists them: `uvx yt-dlp --skip-download --print description <url>`. Then try label and streaming pages, the game or artist wiki, VGMdb and Genius.
     - Never mix two songs in one folder.
+
+## GL engine
+
+For glow, real motion blur and 3D, and for the LAB look (LAB is frozen): `engine: 'gl'` in the project, same commands, `--samples 1` for drafts. Read `src/gl/README.md` in the studio. It is based on [pdoom-video](https://github.com/mexicat/pdoom-video) by Giacomo Magnanini (MIT), so credit it in both credit files. Scenes must depend on `f.t` only and clear depth before 3D.
+
+```bash
+node tools/new-song.mjs <audio> --title "<title>" --key <key> --engine gl
+npm run render -- --project <key> --from 10 --to 14 --samples 1   # draft of a range
+npm run render -- --project <key>                                 # final
+```
+
+- **Render path:** `tools/render-gl.mjs` starts Chrome directly and takes raw frames over a local socket, instead of the capture in step 8. Never drive a long GL render through Playwright: its network inspector copies every frame, and that very likely ran the Mac out of memory and crashed it.
+- **Guards:** a render refuses to start under 30% free memory and stops itself under 10%. It also refuses to leave under 15 GB of disk.
+- **Speed:** a 206 s song took about 6 minutes at final quality in the one full-length test. Sub-frame sampling is adaptive, so heavy scenes cost more: the upper-limit estimate for a 3:30 song is about 41 minutes, or 9 for a draft.
+- **A passing render proves little about the picture.** A missing object gives no error, so always look at frames.
+- **Audit:** `audit-text.mjs` only checks the frame edge on GL, not text inside boxes.
+- **Alignment limit:** Korean and Chinese lines are refused by `tools/align.sh`.
+
+## Machine set pieces
+
+For a song about machines, systems or tech, a line can be an isometric machine whose working is the lyric's idea. See [isometric-figures.md](isometric-figures.md). It is still a pilot, so approve one shot first. Lyrics go in a layer above the figure.
 
 ## Every video looks like itself
 
@@ -74,7 +97,10 @@ A lyric-synced music video is built from analysis data computed once per song. A
 
 ## Style lessons
 
-- **Camera:** slow drift only. No per-line kicks, downbeat zoom punches or glitch jolts. Use shake only for a story beat, and ease it.
+- **Camera:** speed follows the song. A high-energy song gets fast continuous moves, a quiet one a slow drift. No per-line kicks, downbeat zoom punches or glitch jolts: hits move objects and type, not the camera. Use shake only for a story beat, and ease it.
+- **Lyrics large, nothing cut off:** a frame with small lyrics reads as empty. Keep lyrics at least 96 px from the frame edge, and no word crosses the edge or leaves its box while it is meant to be read.
+- **Scene changes land on the beat.** Compute boundaries from lyric lines and the beat grid; never type them in seconds.
+- **Each set piece builds the lyric in differently:** on a curve, typed, stamped, woven in.
 - **Words enter from off-screen** (creator, 2026-10-27): every lyric word flies in from beyond the nearest frame edge to its slot; nothing materialises in place on screen. See visual-languages.md.
 - **Lyric text:** pin it to fixed screen positions like a stencil. With text-art styles this cut per-frame character churn from about 50% to about 5%. Give every CJK character its own x position so wide glyphs don't shift the row.
 - **Colour:** one colour per object, and the same kind of object always has the same colour. Keep it semantic, e.g. coins gold, bills green. Background scenery doesn't count toward these rules.
