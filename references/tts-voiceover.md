@@ -16,12 +16,25 @@
 ROOT="${0:A:h}"; cd "$ROOT/GPT-SoVITS" || exit 1
 export PYTORCH_ENABLE_MPS_FALLBACK=1          # unsupported MPS ops fall back to CPU instead of crashing
 REF_TEXT="<exact transcript of models/refer.wav>"   # must match the reference clip word for word
-exec .venv/bin/python api.py -a 127.0.0.1 -p 9880 -d "${DEVICE:-mps}" -fp \
+exec .venv/bin/python api.py -a 127.0.0.1 -p "${PORT:-9880}" -d "${DEVICE:-mps}" -fp \
   -s "$ROOT/models/<voice>.pth" -g "$ROOT/models/<voice>.ckpt" \
   -dr "$ROOT/models/refer.wav" -dt "$REF_TEXT" -dl zh
 ```
 
 The API is `POST http://127.0.0.1:9880/` with `{"text", "text_language": "zh", "speed", "cut_punc": ""}`. `zh` handles mixed Chinese and English. **`cut_punc` must be `""`.** Otherwise the engine splits at commas and the sentence comes out in fragments. `DEVICE=cpu` is the fallback.
+
+### On-demand startup (do not leave the engine running)
+
+A loaded engine holds about **5 GB** of memory, and one left running for days grows past **15 GB** and pushes the machine into swap. Start it when a script needs voicing and stop it afterwards.
+
+A small proxy makes this automatic. It owns port **9880** (the port every client already uses), starts the engine on another port such as 9881 when the first request arrives, and stops it after an idle timeout:
+
+- The first request pays a cold start (about 12–20 s); later requests run warm (about 1.2 s per sentence).
+- Stop the engine after about **180 s** without requests and the memory comes back.
+- `start_engine.sh` takes `PORT` (default 9880), so the proxy can move the engine to 9881. If you start an engine by hand while the proxy runs, use another port (`PORT=9882 ./start_engine.sh`) and kill it when done.
+- A periodic sweep that kills engine processes no session owns any more (match `api.py … -dr …/refer.wav`, skip the process on the proxy's port) catches the ones that slip through.
+
+When voicing a whole script, keep requests flowing (one per sentence does that). A pause longer than the idle timeout lets the engine stop, and the next sentence pays another cold start; raise the timeout for slow manual work.
 
 ## Generate → verify → assemble
 
