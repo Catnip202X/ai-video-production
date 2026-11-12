@@ -1,6 +1,6 @@
 ---
 name: ai-video-production
-description: End-to-end production of AI-assisted videos by a solo creator — writing the script, storyboarding with a decision log, picking a visual language and the tool that renders it, generating sentence-level Chinese TTS voiceover with a GPT-SoVITS engine (e.g. MamboTTS) and ASR-checking it, timing shots to the VO, building motion graphics in Remotion (clean illustration or hand-drawn rough.js), detailed isometric machine figures that explain a mechanism (anatomy kit), showing real social posts as translated cards, making lyric-synced song music videos, and publishing to Bilibili through a patched bilibili-mcp. Use when the user wants to make, script, storyboard, voice, animate, render or revise an explainer / tutorial / news video or a music video, or says 写脚本, 分镜, 配音, 动画, 动态图形, 视觉语言, 音乐 MV, 做视频.
+description: End-to-end production of AI-assisted videos by a solo creator — writing the script, storyboarding with a decision log, picking a visual language and the tool that renders it (including 66 Lemo-Opuscar library film styles), generating sentence-level Chinese TTS voiceover with a GPT-SoVITS engine (e.g. MamboTTS) and ASR-checking it, timing shots to the VO, building motion graphics in Remotion (clean illustration or hand-drawn rough.js), detailed isometric machine figures that explain a mechanism (anatomy kit), showing real social posts as translated cards, making lyric-synced song music videos, and publishing to Bilibili through a patched bilibili-mcp. Use when the user wants to make, script, storyboard, voice, animate, render or revise an explainer / tutorial / news video or a music video, or says 写脚本, 分镜, 配音, 动画, 动态图形, 视觉语言, 音乐 MV, 做视频.
 ---
 
 # AI video production
@@ -53,7 +53,7 @@ visual language ──▶ Remotion project (one component per shot, timed off th
 | 8. Publish | Covers **in both ratios** (16:9 1920×1080 **and** 4:3 1440×1080) + `upload.json`, then upload through the patched bilibili-mcp, only with the creator's per-upload OK | [publishing-bilibili.md](references/publishing-bilibili.md) |
 | Music video | Song → analysis → lyric timing → palette (the creator picks it, every video) → per-line storyboard with a new scene for every repeated line → frame-pure renderer (GL engine for glow, motion blur, 3D and the LAB look) → text audit → mux. No graphics shared with any other video | [music-videos.md](references/music-videos.md) |
 
-Any video, narrated or music: pick the look from [visual-languages.md](references/visual-languages.md), which also holds the craft toolbox.
+Any video, narrated or music: pick the look from [visual-languages.md](references/visual-languages.md), which also holds the craft toolbox, or from the 66 library film styles in [opuscar-styles.md](references/opuscar-styles.md).
 
 ## Scripts in this skill
 

@@ -16,6 +16,8 @@ Each video picks **one** visual language in the storyboard's *Visual style / loo
 | 等距机械 isometric machine figure | [anatomy](isometric-figures.md) kit (SVG, MIT) in `vendor/anatomy`; `scripts/anatomy-to-video.mjs` | A dense machine built part by part, whose motion is the explanation; clip stepped frame by frame | Mechanisms and systems in explainers; machine or tech set pieces in music videos |
 | ASCII (3D → characters) | three.js rendered into a character grid (lit + normal passes, edge glyphs) | One 3D scene per lyric line; the lyric is written into the lit cells, the sung word as dim block letters behind | Music videos (**default for music videos**) |
 
+**Library styles.** 66 more languages (newsreel, satellite briefing, ink wash, ukiyo-e, risograph, Swiss motion, pixel RPG, tilt-shift and others), each with a tested style prompt, are catalogued in [opuscar-styles.md](opuscar-styles.md). Pick one the same way; the rules below still apply.
+
 Illustration, hand-drawn and ASCII have been used in full productions. IMPACT has full music-video drafts but no approved final yet; in a head-to-head on one song the creator chose the ASCII cut. The others are mapped only. Treat the first real use of any of these as a pilot: make one shot, get the creator's approval, then scale up.
 
 ## Craft toolbox
