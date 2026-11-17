@@ -5,6 +5,7 @@ Each video picks **one** visual language in the storyboard's *Visual style / loo
 | 视觉语言 / language | Tool | How it is produced | Good for |
 |---|---|---|---|
 | 插画 flat illustration / motion graphics | Remotion (React + SVG/CSS), or plain Canvas 2D | Frame-pure components rendered by Remotion; Canvas 2D frames piped to ffmpeg | Explainers, cards, icons, kinetic type (**default for explainers**) |
+| 插画科普 real footage + illustration | Remotion: official / freely licensed footage and photos as full-frame clips and photo cards; Remotion SVG illustration on top or in between | Real media carries every shot it can; illustration explains only what a camera cannot show, and is tagged 示意 | News and science explainers about real events, machines and places (first used in a full production 2026-11) |
 | 手绘草图 hand-drawn sketch | rough.js inside Remotion SVG | Shapes "drawn" stroke by stroke with dash offset; seeds rotated for line boil | Whiteboard feel, casual explanations, process diagrams |
 | 水墨 / 水彩 ink & watercolour | p5.js + p5.brush | Sketch stepped frame by frame, `saveCanvas` per frame, or a headless capture | Mood, Eastern themes, transitions |
 | 3D | three.js | WebGL scene, one frame captured per tick (CCapture or Playwright) | Spatial structure, objects, camera moves |
@@ -59,6 +60,17 @@ brew install --cask blender
   - Put a paper-coloured stroke behind titles that sit on lines.
   - Burned-in subtitles go bottom centre, ≤ 18 characters per cue.
 - **Explainer look.** Use flat vector shapes, cards, smooth easing curves (`cubic-bezier(0.22,1,0.36,1)` out, `(0.65,0,0.35,1)` in-out), springy pops and kinetic type. Don't make it look like a stock template, and don't style it after the subject matter.
+
+## 插画科普 (real footage + illustration) specifics
+
+- **Real media first.** For every shot, look for real footage or a real photo before drawing anything. Official sources (the organisation's own video, webcasts and photo feeds) and public-domain or CC media come first. A drawing replaces real media only when none exists or the point is a mechanism a camera cannot show (an orbit, an inside view, a speed comparison).
+- **The real media is the centre of attention.** Show it full frame (cover, or contain over a blurred copy of itself for portrait photos) or as large photo cards. Do not shrink it into a corner behind graphics.
+- **Every illustrated shot is tagged 示意** in a small pill, so viewers never mistake a drawing for a record.
+- **Every clip carries a one-line source label** (who filmed it, which event, date). Crop broadcast HUDs and watermarks off with a crop plus a slight zoom (about 1.1–1.15); never cover them with graphics.
+- **Match how things really work.** A drawing follows the real geometry and sequence (what burns where, which way a stage falls, what order the steps happen in). Check footage labels against the event; a clip of one burn labelled as another is a blocker.
+- **Hard cuts, no empty backdrops.** Clips and photos cut straight from one to the next; the next element is already on screen on the shot's first frame (negative `at`). Scan the render for frames that show only the background colour and fix every run.
+- **Silent footage.** Strip the source audio (narration and music beds trigger content ID); add sound effects generated in code.
+- **Credit everything** on screen and in the description: official media by organisation, CC media by author and licence.
 
 ## Hand-drawn (rough.js) specifics
 
